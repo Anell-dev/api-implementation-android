@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">ApiPlaces</string>
+    <string name="app_name">Weazel News</string>
+    <string name="favorito">Favoritos</string>
+    <string name="cerrar">Salir</string>
+    <string name="salir_pregunta">¿Estás seguro\nque deseas salir?</string>
+    <string name="titulo">Titulo</string>
 </resources>
