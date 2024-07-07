@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="titulosNoticias">24sp</dimen>
+    <dimen name="tooltips">14sp</dimen>
+    <dimen name="dialog">24sp</dimen>
+    <dimen name="detalles1">16sp</dimen>
+    <dimen name="autor">14sp</dimen>
+
+
+</resources>
