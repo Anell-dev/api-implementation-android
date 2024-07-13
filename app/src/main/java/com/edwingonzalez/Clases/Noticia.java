@@ -1,23 +1,39 @@
 package com.edwingonzalez.Clases;
 
+import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+
 public class Noticia {
     private String id;
     private String titulo;
     private String autor;
     private String detalles;
-    private int megusta;
+    private String fecha;
     private String imagen;
     private String icono;
+    MyHelperSqLite admin;
+    SQLiteDatabase db;
+    String BaseDatos= "basededatos.db";
 
     public Noticia() {
     }
 
-    public Noticia(String id, String titulo, String autor, String detalles, int megusta, String imagen, String icono) {
+    public Noticia(Activity activity2) {
+        admin  = new MyHelperSqLite(activity2, BaseDatos, null, 1);
+        db =  admin.getWritableDatabase();
+    }
+
+
+    public Noticia(String id, String titulo, String autor, String detalles, String fecha, String imagen, String icono) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.detalles = detalles;
-        this.megusta = megusta;
+        this.fecha = fecha;
         this.imagen = imagen;
         this.icono = icono;
     }
@@ -54,12 +70,12 @@ public class Noticia {
         this.detalles = detalles;
     }
 
-    public int getMegusta() {
-        return megusta;
+    public String getFecha() {
+        return fecha;
     }
 
-    public void setMegusta(int megusta) {
-        this.megusta = megusta;
+    public void setFecha(int megusta) {
+        this.fecha = fecha;
     }
 
     public String getImagen() {
@@ -76,5 +92,37 @@ public class Noticia {
 
     public void setIcono(String icono) {
         this.icono = icono;
+    }
+
+    public boolean insertar(){
+        ContentValues registro = new ContentValues();
+        registro.put("id_news", this.id);
+        db.insert("news", null, registro);
+        db.close();
+        return true;
+    }
+
+    public boolean eliminar(){
+        db.delete("news","id_news="+this.id, null);
+        db.close();
+        return true;
+    }
+
+    public ArrayList<Noticia> ListarTodos(){
+        ArrayList<Noticia> lista = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("select id_news from news", null);
+
+        while (cursor.moveToNext()){
+            Noticia n = new Noticia();
+            n.id = cursor.getString(0);
+            n.titulo  = cursor.getString(1);
+            n.autor = cursor.getString(2);
+            n.fecha = cursor.getString(3);
+            n.detalles = cursor.getString(4);
+            lista.add(n);
+        }
+        db.close();
+        return lista;
     }
 }

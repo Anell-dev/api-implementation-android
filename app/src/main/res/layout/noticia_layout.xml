@@ -47,7 +47,7 @@
                         android:fontFamily="@font/poppins_semibold"
                         android:text="Titulo"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/titulosNoticias" />
+                        android:textSize="21sp" />
 
                     <TextView
                         android:id="@+id/textViewInfoDetalles"
@@ -57,7 +57,7 @@
                         android:fontFamily="@font/poppins_light"
                         android:text="Detalles"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/detalles1" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
