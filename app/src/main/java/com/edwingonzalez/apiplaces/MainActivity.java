@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     StringRequest stringRequest;
     NoticiaAdaptador adaptador;
-    String url ="https://p.qr4me.net/";
+    String url = "https://p2.qr4me.net/";
     ImageButton imageButtonFavoritos, imageButtonCerrar;
     private PopupWindow tooltipWindow;
 
@@ -70,45 +71,49 @@ public class MainActivity extends AppCompatActivity {
 
         imageButtonFavoritos = findViewById(R.id.imageButtonFavoritos);
         imageButtonCerrar = findViewById(R.id.imageButtonCerrar);
-
-
         RecyclerViewNoticias = findViewById(R.id.RecyclerViewNoticias);
+
         ArrayList<Noticia> noticias = new ArrayList<>();
+
         requestQueue = Volley.newRequestQueue(this);
 
-        stringRequest = new StringRequest(Request.Method.GET, url, s -> {
-            try {
-                JSONArray jsonArray = new JSONArray(s);
-                for (int i=0; i<jsonArray.length();i++){
-                    JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.getJSONObject(i)));
-                    noticias.add( new Noticia(jsonObject.getString("id"),
-                            jsonObject.getString("titulo"),
-                            jsonObject.getString("autor"),
-                            "",
-                            0,
-                            jsonObject.getString("imagen"),
-                            jsonObject.getString("icono")  ));
+        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                try {
+                    JSONArray jsonArray = new JSONArray(s);
+                    for (int i=0; i<jsonArray.length();i++){
+                        JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.getJSONObject(i)));
+                        noticias.add( new Noticia(jsonObject.getString("id"),
+                                jsonObject.getString("titulo"),
+                                jsonObject.getString("autor"),
+                                jsonObject.getString("detalles"),
+                                "",
+                                jsonObject.getString("imagen"),
+                                jsonObject.getString("icono")  ));
+                    }
+                    adaptador.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
-                adaptador.notifyDataSetChanged();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
 
-        }, volleyError -> {
-
+            }
         });
         requestQueue.add(stringRequest);
 
         adaptador = new NoticiaAdaptador(this, noticias);
-        RecyclerViewNoticias.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        RecyclerViewNoticias.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         RecyclerViewNoticias.setAdapter(adaptador);
 
     }
 
-    //?-------------------------------Botones--------------------------------\\
+    //?-------------------------------Botones - salir y favoritos--------------------------------\\
     @SuppressLint("ClickableViewAccessibility")
     private void setupListeners() {
-        //? Funcionamiento de los botones
         Utilidades.setTooltip(this, imageButtonFavoritos, "Favoritos");
         Utilidades.setTooltip(this, imageButtonCerrar, "Salir");
 
