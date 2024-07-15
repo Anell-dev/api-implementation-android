@@ -47,7 +47,7 @@
                         android:fontFamily="@font/poppins_semibold"
                         android:text="Titulo"
                         android:textColor="@color/black"
-                        android:textSize="21sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/textViewInfoDetalles"
