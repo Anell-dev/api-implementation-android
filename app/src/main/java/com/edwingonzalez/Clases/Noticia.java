@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.edwingonzalez.HelperDb.MyHelperSqLite;
+
 import java.util.ArrayList;
 
 public class Noticia {
@@ -26,7 +28,6 @@ public class Noticia {
         admin  = new MyHelperSqLite(activity2, BaseDatos, null, 1);
         db =  admin.getWritableDatabase();
     }
-
 
     public Noticia(String id, String titulo, String autor, String detalles, String fecha, String imagen, String icono) {
         this.id = id;
@@ -108,6 +109,14 @@ public class Noticia {
         return true;
     }
 
+    public boolean existe(String id) {
+        Cursor cursor = db.rawQuery("SELECT id_news FROM news WHERE id_news = ?", new String[]{id});
+        boolean existe = cursor.getCount() > 0;
+        cursor.close();
+        return existe;
+    }
+
+
     public ArrayList<Noticia> ListarTodos(){
         ArrayList<Noticia> lista = new ArrayList<>();
 
@@ -116,13 +125,12 @@ public class Noticia {
         while (cursor.moveToNext()){
             Noticia n = new Noticia();
             n.id = cursor.getString(0);
-            n.titulo  = cursor.getString(1);
-            n.autor = cursor.getString(2);
-            n.fecha = cursor.getString(3);
-            n.detalles = cursor.getString(4);
             lista.add(n);
         }
+
+//       cursor.close();
         db.close();
         return lista;
     }
+
 }
